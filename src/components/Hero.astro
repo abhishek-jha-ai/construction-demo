@@ -54,16 +54,16 @@ const { hero } = site;
   .hero-media {
     position: absolute;
     inset: 0 0 auto 0;
-    height: 46svh;
-    min-height: 280px;
+    height: 42svh;
+    min-height: 260px;
     z-index: -1;
   }
 
   .hero-media::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgb(20 18 15 / 0.05) 0%, rgb(20 18 15 / 0.2) 55%, var(--night) 100%);
+    inset: 0 0 -2px;
+    background: linear-gradient(180deg, rgb(20 18 15 / 0.05) 0%, rgb(20 18 15 / 0.25) 50%, var(--night) 94%);
   }
 
   .hero-media :global(picture),
@@ -106,7 +106,7 @@ const { hero } = site;
     display: flex;
     flex-direction: column;
     gap: 36px;
-    padding-top: calc(46svh - 72px);
+    padding-top: calc(42svh - 64px);
     padding-bottom: 36px;
   }
 
@@ -130,7 +130,7 @@ const { hero } = site;
   }
 
   .hero-body {
-    margin-top: 18px;
+    margin-top: 14px;
     max-width: 38ch;
     color: var(--on-night-muted);
     font-size: 1.0625rem;
@@ -139,8 +139,8 @@ const { hero } = site;
 
   .hero-actions {
     display: grid;
-    gap: 12px;
-    margin-top: 28px;
+    gap: 10px;
+    margin-top: 24px;
   }
 
   @media (min-width: 520px) {
