@@ -1,0 +1,436 @@
+---
+/**
+ * Short lead form: Name, Phone, Project type, ZIP/City, optional details.
+ * Demo mode: nothing is transmitted or stored; submitting shows a demo notice.
+ * Production: posts multipart form data to `site.lead.endpoint`.
+ */
+import Icon from './Icon.astro';
+import { isDemo, liveLinks, site } from '../site/config';
+
+const { lead } = site;
+---
+<dialog class="estimate" id="estimate-dialog" aria-labelledby="estimate-title" data-estimate>
+  <div class="sheet">
+    <div class="sheet-head">
+      <div>
+        <h2 id="estimate-title">Get your free estimate</h2>
+        <p class="sheet-sub">Takes under a minute. We’ll reach out to schedule a consultation.</p>
+      </div>
+      <button type="button" class="sheet-close" data-estimate-close aria-label="Close">
+        <Icon name="close" size={22} />
+      </button>
+    </div>
+
+    {
+      isDemo && (
+        <p class="demo-notice" role="note">
+          <Icon name="info" size={18} />
+          <span>{lead.demoNotice}</span>
+        </p>
+      )
+    }
+
+    <form
+      class="estimate-form"
+      data-estimate-form
+      data-mode={isDemo ? 'demo' : 'production'}
+      action={liveLinks.leadEndpoint ?? undefined}
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <div class="field">
+        <label for="lead-name">Name</label>
+        <input id="lead-name" name="name" type="text" autocomplete="name" required />
+      </div>
+
+      <div class="field">
+        <label for="lead-phone">Phone</label>
+        <input id="lead-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
+      </div>
+
+      <fieldset class="field">
+        <legend>Project type</legend>
+        <div class="chips">
+          {lead.projectTypes.map((type, i) => (
+            <label class="chip">
+              <input type="radio" name="projectType" value={type} required={i === 0} />
+              <span>{type}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="lead-location">ZIP code or city</label>
+        <input id="lead-location" name="location" type="text" autocomplete="postal-code" required />
+      </div>
+
+      <details class="extras">
+        <summary>
+          <span>Add a message or photos</span>
+          <span class="optional">Optional</span>
+        </summary>
+        <div class="extras-body">
+          <div class="field">
+            <label for="lead-message" class="sr-only">Message</label>
+            <textarea id="lead-message" name="message" rows="3" placeholder="Tell us a little about your project"></textarea>
+          </div>
+          <label class="upload">
+            <Icon name="upload" size={20} />
+            <span data-upload-label>Add photos of your space</span>
+            <input type="file" name="photos" accept="image/*" multiple class="sr-only" data-upload-input />
+          </label>
+        </div>
+      </details>
+
+      <button type="submit" class="btn btn--primary btn--block">
+        <span>Request My Free Estimate</span>
+      </button>
+      <p class="form-error" data-form-error hidden role="alert">
+        Something went wrong sending your request. Please try again.
+      </p>
+    </form>
+
+    <div class="result" data-estimate-result hidden tabindex="-1">
+      <span class="result-icon"><Icon name={isDemo ? 'info' : 'check'} size={28} /></span>
+      {
+        isDemo ? (
+          <>
+            <h3>This is a demo</h3>
+            <p>Nothing was sent or saved. The lead form will be connected to {site.brand.wordmark.primary} at launch.</p>
+          </>
+        ) : (
+          <>
+            <h3>Request received</h3>
+            <p>Thank you — we’ll be in touch shortly to schedule your consultation.</p>
+          </>
+        )
+      }
+      <button type="button" class="btn btn--outline" data-estimate-close>Close</button>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .estimate {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto 0 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    overflow: visible;
+  }
+
+  .estimate::backdrop {
+    background: rgb(20 18 15 / 0.55);
+    backdrop-filter: blur(3px);
+  }
+
+  .estimate[open] .sheet {
+    animation: sheet-up 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .estimate[open]::backdrop {
+    animation: fade 0.3s ease;
+  }
+
+  .sheet {
+    max-height: calc(100svh - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--surface);
+    box-shadow: 0 -20px 60px -20px rgb(20 18 15 / 0.4);
+  }
+
+  .sheet-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  .sheet-sub {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .sheet-close {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    margin: -6px -8px 0 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .sheet-close:hover {
+    background: var(--surface-2);
+  }
+
+  .demo-notice {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 18px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-wash);
+    color: var(--ink-2);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .demo-notice :global(.icon) {
+    flex: none;
+    color: var(--accent-ink);
+  }
+
+  .estimate-form {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .field {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  label,
+  legend {
+    padding: 0;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+
+  legend {
+    margin-bottom: 8px;
+  }
+
+  input[type='text'],
+  input[type='tel'],
+  textarea {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    font-size: 1rem; /* ≥16px prevents iOS zoom */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .chip input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    transition: all 0.2s ease;
+  }
+
+  .chip input:checked + span {
+    border-color: var(--accent);
+    background: var(--accent-wash);
+    color: var(--ink);
+  }
+
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .extras {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .extras summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 50px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--ink-2);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .extras summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .optional {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .extras-body {
+    display: grid;
+    gap: 12px;
+    padding-bottom: 16px;
+  }
+
+  .upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 14px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 50%, var(--line));
+    border-radius: var(--radius-sm);
+    color: var(--accent-ink);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .upload:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .form-error {
+    color: #a1362b;
+    font-size: 0.875rem;
+  }
+
+  .result {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 32px 8px 8px;
+    text-align: center;
+    outline: none;
+  }
+
+  .result[hidden] {
+    display: none;
+  }
+
+  .result-icon {
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent-wash);
+    color: var(--accent-ink);
+  }
+
+  .result h3 {
+    margin-top: 6px;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 560;
+  }
+
+  .result p {
+    max-width: 34ch;
+    color: var(--muted);
+  }
+
+  .result .btn {
+    margin-top: 12px;
+  }
+
+  @media (min-width: 640px) {
+    .estimate {
+      width: min(100% - 48px, 520px);
+      margin: auto;
+    }
+
+    .estimate[open] .sheet {
+      animation-name: pop-in;
+    }
+
+    .sheet {
+      max-height: calc(100svh - 48px);
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 40px 80px -30px rgb(20 18 15 / 0.5);
+    }
+  }
+
+  @keyframes sheet-up {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      transform: translateY(12px) scale(0.98);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .estimate[open] .sheet,
+    .estimate[open]::backdrop {
+      animation: none;
+    }
+  }
+</style>

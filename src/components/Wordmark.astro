@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../site/config';
+
+interface Props {
+  tone?: 'dark' | 'light';
+}
+
+const { tone = 'dark' } = Astro.props;
+const { logo, wordmark, legalName } = site.brand;
+---
+<a href="#top" class:list={['wordmark', `wordmark--${tone}`]} aria-label={`${legalName} — home`}>
+  {
+    logo ? (
+      <Image src={logo} alt="" height={40} loading="eager" />
+    ) : (
+      <>
+        <span class="wordmark-primary">{wordmark.primary}</span>
+        <span class="wordmark-secondary">{wordmark.secondary}</span>
+      </>
+    )
+  }
+</a>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .wordmark--light {
+    color: var(--on-night);
+  }
+
+  .wordmark-primary {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .wordmark-secondary {
+    margin-top: 3px;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    padding-left: 0.32em;
+  }
+
+  .wordmark--light .wordmark-secondary {
+    color: var(--accent-soft);
+  }
+</style>

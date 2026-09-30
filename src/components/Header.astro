@@ -1,0 +1,101 @@
+---
+import EstimateButton from './EstimateButton.astro';
+import Wordmark from './Wordmark.astro';
+import { site } from '../site/config';
+---
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <Wordmark />
+    <nav class="header-nav" aria-label="Primary">
+      <ul>
+        {site.nav.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <EstimateButton label={site.hero.primaryCta} size="sm" arrow={false} class="header-cta" />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .site-header.is-scrolled {
+    border-bottom-color: var(--line);
+    box-shadow: 0 6px 24px -18px rgb(28 25 21 / 0.35);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 64px;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .header-nav ul {
+    display: flex;
+    gap: 36px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .header-nav a {
+    position: relative;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .header-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 1.5px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .header-nav a:hover {
+    color: var(--ink);
+  }
+
+  .header-nav a:hover::after {
+    transform: scaleX(1);
+  }
+
+  @media (min-width: 900px) {
+    .header-inner {
+      height: 76px;
+    }
+
+    .header-nav {
+      display: block;
+    }
+
+    :global(.header-cta) {
+      --btn-h: 46px !important;
+      padding: 0 22px !important;
+    }
+  }
+</style>

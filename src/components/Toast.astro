@@ -1,0 +1,28 @@
+<div class="toast" data-toast role="status" aria-live="polite" hidden></div>
+
+<style>
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    z-index: 60;
+    width: max-content;
+    max-width: calc(100% - 32px);
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: var(--night);
+    color: var(--on-night);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 20px 40px -16px rgb(20 18 15 / 0.5);
+    transform: translate(-50%, 16px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .toast.is-visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+</style>

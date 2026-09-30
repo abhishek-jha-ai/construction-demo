@@ -1,0 +1,61 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../site/config';
+---
+<ul class="trust" aria-label="Why homeowners choose us">
+  {site.trust.map((item) => (
+    <li>
+      <Icon name={item.icon} size={22} />
+      <span>{item.label}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .trust {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 0;
+    padding: 20px 0 0;
+    list-style: none;
+    border-top: 1px solid rgb(245 239 230 / 0.14);
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--on-night);
+  }
+
+  li :global(.icon) {
+    color: var(--accent-soft);
+  }
+
+  @media (min-width: 640px) {
+    .trust {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 36px;
+    }
+
+    li {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .trust {
+      border-top: 0;
+      padding-top: 0;
+    }
+  }
+</style>

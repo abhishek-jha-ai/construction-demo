@@ -1,0 +1,80 @@
+---
+import Wordmark from './Wordmark.astro';
+import { site, liveLinks } from '../site/config';
+
+const year = new Date().getFullYear();
+const { contact, credit, brand } = site;
+---
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <Wordmark />
+      <p>Kitchen, bath &amp; flooring remodeling · {contact.serviceArea}</p>
+      {
+        (liveLinks.phone || liveLinks.email) && (
+          <p class="footer-contact">
+            {liveLinks.phone && <a href={liveLinks.phone}>Call us</a>}
+            {liveLinks.email && <a href={liveLinks.email}>{contact.email}</a>}
+          </p>
+        )
+      }
+    </div>
+    <div class="footer-meta">
+      <p>© {year} {brand.legalName}</p>
+      <p class="footer-credit">
+        {credit.label} · <a href={`mailto:${credit.email}`}>{credit.email}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding-block: 36px 40px;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: 24px;
+  }
+
+  .footer-brand {
+    display: grid;
+    justify-items: start;
+    gap: 12px;
+  }
+
+  .footer-contact {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer-meta {
+    display: grid;
+    gap: 4px;
+  }
+
+  .footer-credit a {
+    color: var(--ink-2);
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line);
+  }
+
+  .footer-credit a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  @media (min-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .footer-meta {
+      text-align: right;
+    }
+  }
+</style>

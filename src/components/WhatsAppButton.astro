@@ -1,0 +1,31 @@
+---
+/**
+ * Live wa.me link in production. In demo mode (or with no number configured)
+ * it renders a button that only shows a notice — nothing is sent.
+ */
+import Icon from './Icon.astro';
+import { liveLinks, site } from '../site/config';
+
+interface Props {
+  label: string;
+  variant?: 'primary' | 'outline' | 'ghost-light';
+  block?: boolean;
+  class?: string;
+}
+
+const { label, variant = 'outline', block = false, class: className } = Astro.props;
+const classes = ['btn', `btn--${variant}`, { 'btn--block': block }, className];
+---
+{
+  liveLinks.whatsapp ? (
+    <a class:list={classes} href={liveLinks.whatsapp} target="_blank" rel="noopener">
+      <Icon name="whatsapp" />
+      <span>{label}</span>
+    </a>
+  ) : (
+    <button type="button" class:list={classes} data-demo-notice={site.lead.demoWhatsappNotice}>
+      <Icon name="whatsapp" />
+      <span>{label}</span>
+    </button>
+  )
+}

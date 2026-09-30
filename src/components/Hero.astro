@@ -1,0 +1,203 @@
+---
+import { Picture } from 'astro:assets';
+import EstimateButton from './EstimateButton.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import TrustStrip from './TrustStrip.astro';
+import { site } from '../site/config';
+
+const { hero } = site;
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-media">
+    <Picture
+      src={hero.image.src}
+      alt={hero.image.alt}
+      widths={[640, 960, 1280, 1672]}
+      sizes="100vw"
+      formats={['avif', 'webp']}
+      fallbackFormat="jpg"
+      quality={70}
+      loading="eager"
+      fetchpriority="high"
+      class="hero-img"
+    />
+    {!hero.image.verified && <span class="concept-tag">Concept visual</span>}
+  </div>
+
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow hero-eyebrow">{hero.eyebrow}</span>
+      <h1 id="hero-title">
+        {hero.headline.map((line, i) => (
+          <span class:list={['hero-line', { 'is-accent': i === hero.accentLine }]}>{line} </span>
+        ))}
+      </h1>
+      <p class="hero-body">{hero.body}</p>
+      <div class="hero-actions">
+        <EstimateButton label={hero.primaryCta} />
+        <WhatsAppButton label={hero.secondaryCta} variant="ghost-light" />
+      </div>
+    </div>
+    <TrustStrip />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--night);
+    color: var(--on-night);
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 46svh;
+    min-height: 280px;
+    z-index: -1;
+  }
+
+  .hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(20 18 15 / 0.05) 0%, rgb(20 18 15 / 0.2) 55%, var(--night) 100%);
+  }
+
+  .hero-media :global(picture),
+  .hero-media :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-media :global(img) {
+    object-fit: cover;
+    object-position: 68% 50%;
+    animation: hero-settle 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  @keyframes hero-settle {
+    from {
+      transform: scale(1.06);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .concept-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgb(20 18 15 / 0.55);
+    backdrop-filter: blur(6px);
+    color: var(--on-night-muted);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    padding-top: calc(46svh - 72px);
+    padding-bottom: 36px;
+  }
+
+  .hero-eyebrow {
+    color: var(--accent-soft);
+  }
+
+  h1 {
+    margin-top: 14px;
+    font-size: clamp(2.6rem, 11vw, 4.75rem);
+  }
+
+  .hero-line {
+    display: inline;
+  }
+
+  .hero-line.is-accent {
+    color: var(--accent-soft);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .hero-body {
+    margin-top: 18px;
+    max-width: 38ch;
+    color: var(--on-night-muted);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  @media (min-width: 520px) {
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      min-height: min(760px, calc(100svh - 110px));
+      display: flex;
+    }
+
+    .hero-media {
+      inset: 0;
+      height: auto;
+    }
+
+    .hero-media::after {
+      background:
+        linear-gradient(90deg, rgb(20 18 15 / 0.92) 0%, rgb(20 18 15 / 0.78) 32%, rgb(20 18 15 / 0.15) 62%, rgb(20 18 15 / 0) 100%),
+        linear-gradient(0deg, rgb(20 18 15 / 0.55) 0%, rgb(20 18 15 / 0) 30%);
+    }
+
+    .hero-media :global(img) {
+      object-position: 60% 50%;
+    }
+
+    .concept-tag {
+      top: auto;
+      bottom: 20px;
+      right: 24px;
+    }
+
+    .hero-inner {
+      justify-content: space-between;
+      padding-top: clamp(64px, 9vh, 104px);
+      padding-bottom: 40px;
+    }
+
+    .hero-copy {
+      max-width: 580px;
+    }
+
+    .hero-line {
+      display: block;
+    }
+
+    .hero-body {
+      font-size: 1.125rem;
+    }
+
+    .hero-actions {
+      margin-top: 36px;
+      gap: 14px;
+    }
+  }
+</style>

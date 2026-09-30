@@ -1,0 +1,35 @@
+/* YDY brand tokens. Components use these variables only — swap this file to rebrand. */
+@import '@fontsource-variable/fraunces/wght.css';
+@import '@fontsource-variable/manrope/wght.css';
+
+:root {
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Manrope Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Warm neutrals */
+  --surface: #faf7f2;
+  --surface-2: #f3ede4;
+  --surface-3: #ebe3d7;
+  --card: #fffdf9;
+  --line: #e4dbcd;
+  --ink: #1c1915;
+  --ink-2: #3d3730;
+  --muted: #6b635a;
+
+  /* Dark band */
+  --night: #14120f;
+  --night-2: #1f1b17;
+  --on-night: #f5efe6;
+  --on-night-muted: #c9bfb2;
+
+  /* Restrained bronze */
+  --accent: #9a6b43;         /* fills; white text passes AA */
+  --accent-hover: #865b37;
+  --accent-ink: #8a5e3b;     /* accent text on light surfaces */
+  --accent-soft: #c9a27a;    /* accent text on dark surfaces */
+  --accent-wash: #f1e6d8;
+
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+}

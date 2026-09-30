@@ -1,0 +1,161 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { site } from '../site/config';
+
+const { services } = site;
+---
+<section class="section services" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <SectionHeading eyebrow={services.eyebrow} title={services.title} id="services-title" />
+    <ul class="service-grid">
+      {services.items.map((item, i) => (
+        <li class="service-card" data-reveal style={`--reveal-delay:${i * 0.07}s`}>
+          <span class="service-icon"><Icon name={item.icon} size={28} /></span>
+          <div class="service-text">
+            <h3>{item.title}</h3>
+            <p class="service-body">{item.body}</p>
+          </div>
+          <button
+            type="button"
+            class="service-link"
+            data-open-estimate
+            data-project-type={item.projectType}
+            aria-haspopup="dialog"
+            aria-controls="estimate-dialog"
+            aria-label={`Get estimate for ${item.title.toLowerCase()}`}
+          >
+            <span class="service-link-label" aria-hidden="true">Get estimate</span>
+            <Icon name="arrowRight" size={18} />
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .service-grid {
+    display: grid;
+    gap: 12px;
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .service-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--card);
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .service-card:has(.service-link:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .service-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    box-shadow: 0 18px 40px -28px rgb(28 25 21 / 0.35);
+    transform: translateY(-2px);
+  }
+
+  .service-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--accent-wash);
+    color: var(--accent-ink);
+  }
+
+  .service-text {
+    display: grid;
+    gap: 4px;
+  }
+
+  .service-body {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .service-link {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-ink);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .service-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .service-link:focus-visible {
+    outline: none;
+  }
+
+  .service-link-label {
+    display: none;
+  }
+
+  .service-link :global(.icon) {
+    transition: transform 0.2s ease;
+  }
+
+  .service-card:hover .service-link :global(.icon) {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 640px) {
+    .service-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .service-grid {
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: 48px;
+    }
+
+    .service-card {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr auto;
+      align-items: start;
+      gap: 20px;
+      padding: 28px 24px 24px;
+    }
+
+    .service-text {
+      gap: 8px;
+    }
+
+    .service-link-label {
+      display: inline;
+    }
+  }
+</style>

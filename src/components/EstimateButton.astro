@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  label: string;
+  projectType?: string;
+  variant?: 'primary' | 'outline' | 'ghost-light';
+  size?: 'sm' | 'md';
+  block?: boolean;
+  arrow?: boolean;
+  class?: string;
+}
+
+const { label, projectType, variant = 'primary', size = 'md', block = false, arrow = true, class: className } = Astro.props;
+---
+<button
+  type="button"
+  class:list={['btn', `btn--${variant}`, { 'btn--sm': size === 'sm', 'btn--block': block }, className]}
+  data-open-estimate
+  data-project-type={projectType}
+  aria-haspopup="dialog"
+  aria-controls="estimate-dialog"
+>
+  <span>{label}</span>
+  {arrow && <Icon name="arrowRight" class="btn-arrow" />}
+</button>

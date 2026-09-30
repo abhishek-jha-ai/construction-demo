@@ -1,0 +1,122 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { site } from '../site/config';
+
+const { process } = site;
+---
+<section class="section process" id="process" aria-labelledby="process-title">
+  <div class="container">
+    <SectionHeading eyebrow={process.eyebrow} title={process.title} id="process-title" />
+    <ol class="steps">
+      {process.steps.map((step, i) => (
+        <li class="step" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+          <span class="step-icon"><Icon name={step.icon} size={24} /></span>
+          <div class="step-text">
+            <span class="step-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process {
+    background: var(--surface-2);
+  }
+
+  .steps {
+    position: relative;
+    display: grid;
+    gap: 28px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 18px;
+  }
+
+  /* Connector line */
+  .step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 60px;
+    bottom: -24px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent-soft), var(--line));
+  }
+
+  .step-icon {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+    border-radius: 50%;
+    background: var(--card);
+    color: var(--accent-ink);
+  }
+
+  .step-text {
+    padding-top: 4px;
+  }
+
+  .step-num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--accent-ink);
+    font-variant-numeric: lining-nums;
+  }
+
+  h3 {
+    margin-top: 2px;
+  }
+
+  p {
+    margin-top: 6px;
+    max-width: 34ch;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 900px) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+
+    .step {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .step:not(:last-child)::before {
+      left: 72px;
+      right: -20px;
+      top: 28px;
+      bottom: auto;
+      width: auto;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-soft), var(--line));
+    }
+
+    .step-text {
+      padding-top: 0;
+    }
+  }
+</style>

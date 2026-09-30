@@ -1,0 +1,35 @@
+---
+import { getImage } from 'astro:assets';
+import '../site/theme.css';
+import '../styles/global.css';
+import { isDemo, site } from '../site/config';
+
+const { seo, hero } = site;
+const ogImage = await getImage({ src: hero.image.src, width: 1200, format: 'jpg', quality: 75 });
+const ogUrl = new URL(ogImage.src, Astro.site ?? seo.url).href;
+---
+<!doctype html>
+<html lang="en" data-mode={site.mode}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <meta name="theme-color" content="#faf7f2" />
+    {isDemo && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:locale" content={seo.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body id="top">
+    <slot />
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>
